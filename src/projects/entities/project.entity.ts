@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Project { 
- @PrimaryGeneratedColumn()
+@Entity('projects')
+export class Project {
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
@@ -13,7 +13,7 @@ export class Project {
 
   @Column({ nullable: false })
   title: string;
-  
+
   @Column({ nullable: false })
-  github:string
+  github: string
 }

@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-
+import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/common';
+import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
-
-import { InjectRepository } from '@nestjs/typeorm';
-import { Project } from './entities/project.entity';
-import { Repository } from 'typeorm';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(@InjectRepository(Project) private projectsRepoistory: Repository<Project>,
-) {}
+  constructor(private readonly projectsService: ProjectsService) { }
 
- @Post()
- async create(@Body() createprojectDto: CreateProjectDto) {
-   const newUser = this.projectsRepoistory.create(createprojectDto); // DTO를 기반으로 엔티티 생성
-   return await this.projectsRepoistory.save(newUser); // 데이터베이스에 저장
- }
- 
- @Get()
-   findAll() {
-     return this.projectsRepoistory.find();
-   }
- 
-   @Get(':id')
-   findOne(@Param('id') id: string) {
-     return this.projectsRepoistory.findOne({ where: { id: +id } });
-   }
- 
-   @Delete(':id')
-   remove(@Param('id') id: string) {
-     return this.projectsRepoistory.delete(+id);
-   }
- }
+  @Post()
+  create(@Body() createProjectDto: CreateProjectDto) {
+    return this.projectsService.create(createProjectDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.projectsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.projectsService.findOne(+id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+    return this.projectsService.update(+id, updateProjectDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.projectsService.remove(+id);
+  }
+}
